@@ -10,5 +10,5 @@ public class FinancialException extends Exception {
 	public FinancialException(String msg) {
 		super(msg);
 	}
-
+	
 }

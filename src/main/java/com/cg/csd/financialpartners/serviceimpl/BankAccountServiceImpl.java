@@ -48,5 +48,21 @@ public class BankAccountServiceImpl implements BankAccountService {
 		return bankAccountRepo.findByCustomerId(customerId);
 
 	}
+	
+	@Override
+	public BankAccountEntity findByBankAccount(String accNo) {
+		return bankAccountRepo.findByAccNo(accNo);
+	}
+	
+	@Override
+	public int updateBal(double accBal,String accNo) {
+		return bankAccountRepo.updateBal(accNo, accBal);
+	}
+	
+	
+
+	
+	
+	
 
 }

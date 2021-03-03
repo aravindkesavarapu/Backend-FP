@@ -14,4 +14,6 @@ public interface TransactionController {
 public ResponseEntity<Response> addTransaction(@RequestBody TransactionEntity transactionentity) throws FinancialException;
 public ResponseEntity<List<TransactionEntity>> getAllTransaction(@PathVariable Long id) throws FinancialException;
 public ResponseEntity<List<TransactionEntity>> getMiniStatement(@PathVariable Long id) throws FinancialException;
+public ResponseEntity<Response> transferBal(@RequestBody TransactionEntity transactionentity) throws FinancialException;
+
 }
