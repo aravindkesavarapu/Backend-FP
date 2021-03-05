@@ -11,4 +11,5 @@ public TransactionEntity addTransction(TransactionEntity transactionEntity) thro
 public List<TransactionEntity> getAllTransaction(Long customerId);
 public List<TransactionEntity> getMiniStatement(Long customerId);
 public TransactionEntity transfer(TransactionEntity transactionEntity);
+
 }

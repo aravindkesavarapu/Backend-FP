@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,9 +20,13 @@ import com.cg.csd.financialpartners.controller.BankAccountController;
 import com.cg.csd.financialpartners.entity.BankAccountEntity;
 import com.cg.csd.financialpartners.entity.CustomerEntity;
 import com.cg.csd.financialpartners.entity.Response;
+import com.cg.csd.financialpartners.entity.TransactionEntity;
 import com.cg.csd.financialpartners.exception.FinancialException;
+import com.cg.csd.financialpartners.repo.BankAccountRepo;
 import com.cg.csd.financialpartners.repo.CustomerRepo;
 import com.cg.csd.financialpartners.service.BankAccountService;
+import com.cg.csd.financialpartners.service.TransactionService;
+import com.cg.csd.financialpartners.serviceimpl.TransactionServiceImpl;
 
 @CrossOrigin("*")
 @RestController
@@ -32,6 +37,12 @@ public class BankAccountControllerImpl implements BankAccountController {
 	private BankAccountService bankAccountService;
 
 	private static final Logger logger;
+
+	@Autowired
+	private TransactionService transctionService;
+
+	@Autowired
+	private BankAccountRepo accountRepo;
 
 	static {
 		logger = LoggerFactory.getLogger(BankAccountControllerImpl.class);
@@ -101,4 +112,29 @@ public class BankAccountControllerImpl implements BankAccountController {
 		return new ResponseEntity<BankAccountEntity>(bank, HttpStatus.OK);
 	}
 
+	@GetMapping("/deposit/{accNo}/{amount}")
+	public ResponseEntity<Response> depositMoney(@PathVariable String accNo, @PathVariable double amount) throws FinancialException {
+		BankAccountEntity bankAccountEntity = bankAccountService.findByBankAccount(accNo);
+		if (bankAccountEntity == null) {
+			r.setStatus("ERROR");
+			r.setValue("Bank Account not Found");
+			return new ResponseEntity<Response>(r, HttpStatus.BAD_REQUEST);
+		} else {
+			double accBal = bankAccountEntity.getAccBal() + amount;
+			System.out.println(accBal);
+			bankAccountEntity.setAccBal(accBal);
+//			bankAccountEntity.
+			bankAccountService.addBankAccount(bankAccountEntity);
+			System.out.println(bankAccountEntity);
+//			int updateBal = accountRepo.updateBal(accNo, accBal);
+//			TransactionEntity transEntity = new TransactionEntity();
+//			transEntity.settAmount(Long.parseLong(amount));
+//			transEntity.
+
+//			transctionService.addTransction(transactionEntity);
+			r.setStatus("SUCESS");
+			r.setValue("Amount Deposited Succesfully: " + accBal);
+			return new ResponseEntity<Response>(r, HttpStatus.OK);
+		}
+	}
 }

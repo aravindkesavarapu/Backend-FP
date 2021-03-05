@@ -21,5 +21,4 @@ public interface BankAccountRepo extends JpaRepository<BankAccountEntity, Long> 
 	public int updateBal(String accNo,Double accBal);
 	
 	
-	
 }

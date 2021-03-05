@@ -2,6 +2,8 @@ package com.cg.csd.financialpartners.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 public class Response {
 	
 	private String value;
