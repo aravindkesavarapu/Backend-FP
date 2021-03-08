@@ -138,11 +138,11 @@ public class ApplyLoanEntity {
 		this.endDate = endDate;
 	}
 
-	public Long getcId() {
+	public Long getcustId() {
 		return custId;
 	}
 
-	public void setcId(Long custId) {
+	public void setcustId(Long custId) {
 		this.custId = custId;
 	}
 
