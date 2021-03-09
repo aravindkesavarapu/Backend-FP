@@ -52,6 +52,7 @@ public class ApplyLoanEntity {
 	
 	@Column(name="annual_income")
 	private double annnualIncome;
+	
 
 	public Long getLoanId() {
 		return loanId;

@@ -11,4 +11,6 @@ import com.cg.csd.financialpartners.exception.FinancialException;
 public interface ApplyLoanController {
 public ResponseEntity<Response> addLoan(@RequestBody ApplyLoanEntity loanentity) throws FinancialException;
 public ResponseEntity<Response> findByCustID(@PathVariable Long custId) throws FinancialException;
+public ResponseEntity<Response> updateLoanStatus(@PathVariable long loanId, @PathVariable String status) throws FinancialException;
+
 }

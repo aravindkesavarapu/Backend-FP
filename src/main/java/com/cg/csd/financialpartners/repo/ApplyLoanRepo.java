@@ -10,4 +10,7 @@ import com.cg.csd.financialpartners.entity.ApplyLoanEntity;
 @Repository
 public interface ApplyLoanRepo extends JpaRepository<ApplyLoanEntity, Long> {
 	public List<ApplyLoanEntity> findByCustId(Long custId);
+	public List<ApplyLoanEntity> findByStatus(String status);
+
+	
 }
