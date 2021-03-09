@@ -49,6 +49,9 @@ public class ApplyLoanEntity {
 
 	@Column(name ="custId")
 	private Long custId;
+	
+	@Column(name="annual_income")
+	private double annnualIncome;
 
 	public Long getLoanId() {
 		return loanId;
@@ -138,21 +141,25 @@ public class ApplyLoanEntity {
 		this.endDate = endDate;
 	}
 
-	public Long getcustId() {
+	public Long getCustId() {
 		return custId;
 	}
 
-	public void setcustId(Long custId) {
+	public void setCustId(Long custId) {
 		this.custId = custId;
 	}
 
-	public ApplyLoanEntity() {
-		super();
+	public double getAnnnualIncome() {
+		return annnualIncome;
+	}
+
+	public void setAnnnualIncome(double annnualIncome) {
+		this.annnualIncome = annnualIncome;
 	}
 
 	public ApplyLoanEntity(Long loanId, String cAccNumber, double ammount, Long cibil, double interestRate,
 			String duration, double emi, String purpose, String status, LocalDate startDate, LocalDate endDate,
-			Long custId) {
+			Long custId, double annnualIncome) {
 		super();
 		this.loanId = loanId;
 		this.cAccNumber = cAccNumber;
@@ -166,6 +173,12 @@ public class ApplyLoanEntity {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.custId = custId;
+		this.annnualIncome = annnualIncome;
+	}
+
+	public ApplyLoanEntity() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -175,9 +188,11 @@ public class ApplyLoanEntity {
 		long temp;
 		temp = Double.doubleToLongBits(ammount);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(annnualIncome);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((cAccNumber == null) ? 0 : cAccNumber.hashCode());
-		result = prime * result + ((custId == null) ? 0 : custId.hashCode());
 		result = prime * result + ((cibil == null) ? 0 : cibil.hashCode());
+		result = prime * result + ((custId == null) ? 0 : custId.hashCode());
 		result = prime * result + ((duration == null) ? 0 : duration.hashCode());
 		temp = Double.doubleToLongBits(emi);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -202,20 +217,22 @@ public class ApplyLoanEntity {
 		ApplyLoanEntity other = (ApplyLoanEntity) obj;
 		if (Double.doubleToLongBits(ammount) != Double.doubleToLongBits(other.ammount))
 			return false;
+		if (Double.doubleToLongBits(annnualIncome) != Double.doubleToLongBits(other.annnualIncome))
+			return false;
 		if (cAccNumber == null) {
 			if (other.cAccNumber != null)
 				return false;
 		} else if (!cAccNumber.equals(other.cAccNumber))
 			return false;
-		if (custId == null) {
-			if (other.custId != null)
-				return false;
-		} else if (!custId.equals(other.custId))
-			return false;
 		if (cibil == null) {
 			if (other.cibil != null)
 				return false;
 		} else if (!cibil.equals(other.cibil))
+			return false;
+		if (custId == null) {
+			if (other.custId != null)
+				return false;
+		} else if (!custId.equals(other.custId))
 			return false;
 		if (duration == null) {
 			if (other.duration != null)
@@ -252,14 +269,6 @@ public class ApplyLoanEntity {
 		} else if (!status.equals(other.status))
 			return false;
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "ApplyLoanEntity [loanId=" + loanId + ", cAccNumber=" + cAccNumber + ", ammount=" + ammount + ", cibil="
-				+ cibil + ", interestRate=" + interestRate + ", duration=" + duration + ", emi=" + emi + ", purpose="
-				+ purpose + ", status=" + status + ", startDate=" + startDate + ", endDate=" + endDate + ", custId=" + custId
-				+ "]";
 	}
 	
 }

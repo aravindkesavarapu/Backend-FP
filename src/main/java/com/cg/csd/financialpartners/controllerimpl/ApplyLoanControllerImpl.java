@@ -51,6 +51,8 @@ public class ApplyLoanControllerImpl implements ApplyLoanController {
 	@PostMapping("/addLoan")
 	@Override
 	public ResponseEntity<Response> addLoan(@RequestBody ApplyLoanEntity loanentity) throws FinancialException {
+		
+		System.out.println(loanentity);
 		ApplyLoanEntity loanentity1 = loanservice.addLoan(loanentity);
 		if (loanentity1 != null) {
 			logger.debug("Loan Applied Successfully");
@@ -63,6 +65,8 @@ public class ApplyLoanControllerImpl implements ApplyLoanController {
 		}
 		return response3;
 	}
+	
+	
 
 	@GetMapping("/findByCId/{custId}")
 	@Override
