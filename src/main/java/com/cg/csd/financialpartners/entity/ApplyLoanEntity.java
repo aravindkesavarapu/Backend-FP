@@ -23,8 +23,10 @@ public class ApplyLoanEntity {
 	@Column(name ="loanAmmount")
 	private double ammount;
 	
+	@Column(name ="customer_name")
+	private String customerName;
 	@Column(name ="cibil")
-	private Long cibil;
+	private Double cibil;
 	
 	@Column(name ="interestRate")
 	private double interestRate;
@@ -52,7 +54,6 @@ public class ApplyLoanEntity {
 	
 	@Column(name="annual_income")
 	private double annnualIncome;
-	
 
 	public Long getLoanId() {
 		return loanId;
@@ -78,11 +79,19 @@ public class ApplyLoanEntity {
 		this.ammount = ammount;
 	}
 
-	public Long getCibil() {
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+	public Double getCibil() {
 		return cibil;
 	}
 
-	public void setCibil(Long cibil) {
+	public void setCibil(Double cibil) {
 		this.cibil = cibil;
 	}
 
@@ -158,13 +167,23 @@ public class ApplyLoanEntity {
 		this.annnualIncome = annnualIncome;
 	}
 
-	public ApplyLoanEntity(Long loanId, String cAccNumber, double ammount, Long cibil, double interestRate,
-			String duration, double emi, String purpose, String status, LocalDate startDate, LocalDate endDate,
-			Long custId, double annnualIncome) {
+	@Override
+	public String toString() {
+		return "ApplyLoanEntity [loanId=" + loanId + ", cAccNumber=" + cAccNumber + ", ammount=" + ammount
+				+ ", customerName=" + customerName + ", cibil=" + cibil + ", interestRate=" + interestRate
+				+ ", duration=" + duration + ", emi=" + emi + ", purpose=" + purpose + ", status=" + status
+				+ ", startDate=" + startDate + ", endDate=" + endDate + ", custId=" + custId + ", annnualIncome="
+				+ annnualIncome + "]";
+	}
+
+	public ApplyLoanEntity(Long loanId, String cAccNumber, double ammount, String customerName, Double cibil,
+			double interestRate, String duration, double emi, String purpose, String status, LocalDate startDate,
+			LocalDate endDate, Long custId, double annnualIncome) {
 		super();
 		this.loanId = loanId;
 		this.cAccNumber = cAccNumber;
 		this.ammount = ammount;
+		this.customerName = customerName;
 		this.cibil = cibil;
 		this.interestRate = interestRate;
 		this.duration = duration;
@@ -194,6 +213,7 @@ public class ApplyLoanEntity {
 		result = prime * result + ((cAccNumber == null) ? 0 : cAccNumber.hashCode());
 		result = prime * result + ((cibil == null) ? 0 : cibil.hashCode());
 		result = prime * result + ((custId == null) ? 0 : custId.hashCode());
+		result = prime * result + ((customerName == null) ? 0 : customerName.hashCode());
 		result = prime * result + ((duration == null) ? 0 : duration.hashCode());
 		temp = Double.doubleToLongBits(emi);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -235,6 +255,11 @@ public class ApplyLoanEntity {
 				return false;
 		} else if (!custId.equals(other.custId))
 			return false;
+		if (customerName == null) {
+			if (other.customerName != null)
+				return false;
+		} else if (!customerName.equals(other.customerName))
+			return false;
 		if (duration == null) {
 			if (other.duration != null)
 				return false;
@@ -271,5 +296,7 @@ public class ApplyLoanEntity {
 			return false;
 		return true;
 	}
+	
+
 	
 }

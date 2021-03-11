@@ -56,14 +56,15 @@ public class ApplyLoanControllerImpl implements ApplyLoanController {
 	@Override
 	public ResponseEntity<Response> addLoan(@RequestBody ApplyLoanEntity loanentity) throws FinancialException {
 		BankAccountEntity bankAccountEntity = bankService.findByBankAccount(loanentity.getcAccNumber());
-		if (bankAccountEntity.getCibil() <= 35) {
+		if (bankAccountEntity.getCibil() <= 720) {
 			r.setStatus("ERROR");
 			r.setValue("Your CIBIL is Low!! You Can't apply for Loan");
 			return new ResponseEntity<Response>(r, HttpStatus.OK);
 		} else {
-			loanentity.setInterestRate(6);
+//			loanentity.setInterestRate(b);
 			loanentity.setStatus("PENDING");
 			loanentity.setCibil(bankAccountEntity.getCibil());
+			loanentity.setCustomerName(bankAccountEntity.getCustomerName());
 			ApplyLoanEntity loanentity1 = loanservice.addLoan(loanentity);
 			if (loanentity1 != null) {
 				logger.debug("Loan Applied Successfully");

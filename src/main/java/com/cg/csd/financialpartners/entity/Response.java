@@ -13,6 +13,37 @@ public class Response {
 	private CustomerEntity cEntity;
 	private List<TransactionEntity> transactionEntities;
 	private List<ApplyLoanEntity> applyLoan;
+	private AdminDetails admin;
+	
+	public Response(String value, String status, List<BankAccountEntity> bankAccount, BankAccountEntity account,
+			CustomerEntity cEntity, List<TransactionEntity> transactionEntities, List<ApplyLoanEntity> applyLoan,
+			AdminDetails admin) {
+		super();
+		this.value = value;
+		this.status = status;
+		this.bankAccount = bankAccount;
+		this.account = account;
+		this.cEntity = cEntity;
+		this.transactionEntities = transactionEntities;
+		this.applyLoan = applyLoan;
+		this.admin = admin;
+	}
+
+	public BankAccountEntity getAccount() {
+		return account;
+	}
+
+	public void setAccount(BankAccountEntity account) {
+		this.account = account;
+	}
+
+	public AdminDetails getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(AdminDetails admin) {
+		this.admin = admin;
+	}
 
 	public String getValue() {
 		return value;
@@ -64,8 +95,9 @@ public class Response {
 
 	@Override
 	public String toString() {
-		return "Response [value=" + value + ", status=" + status + ", bankAccount=" + bankAccount + ", cEntity="
-				+ cEntity + ", transactionEntities=" + transactionEntities + ", applyLoan" + applyLoan + "]";
+		return "Response [value=" + value + ", status=" + status + ", bankAccount=" + bankAccount + ", account="
+				+ account + ", cEntity=" + cEntity + ", transactionEntities=" + transactionEntities + ", applyLoan="
+				+ applyLoan + ", admin=" + admin + "]";
 	}
 
 	public Response(String value, String status, List<BankAccountEntity> bankAccount, CustomerEntity cEntity,

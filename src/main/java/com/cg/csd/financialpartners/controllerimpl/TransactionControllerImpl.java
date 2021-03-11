@@ -48,36 +48,6 @@ public class TransactionControllerImpl implements TransactionController {
 
 	Response r = new Response();
 
-	// Aravind this method to deposit implemetation
-	@PostMapping("/addTransaction")
-	@Override
-	public ResponseEntity<Response> addTransaction(@RequestBody TransactionEntity transactionentity)
-			throws FinancialException {
-//		if(transactionentity.getCustomerId() == null || transactionentity.getFromAcc() == null ||  transactionentity.gettType() == null) {
-//			r.setValue("Unable to process your transaction");
-//			logger.error("Transaction failed null value" + transactionentity);
-//			response3 = new ResponseEntity<>(r,HttpStatus.BAD_REQUEST);
-//			throw new FinancialException("Transaction failed");
-//		}
-//		else {
-//			transactionentity.settDate(LocalDate.now());
-//			transactionentity.settTime(LocalTime.now());
-//			BankAccountEntity bankDetails = service1.addBal(transactionentity);
-//			if(bankDetails == null) {
-//				logger.error("Transaction failed" + bankDetails);
-//				r.setValue("Unable to process your transaction or Please Login again");
-//				response3 = new ResponseEntity<Response>(r,HttpStatus.EXPECTATION_FAILED);
-//			}
-//			else {
-//				logger.info("Transction Amount" + transactionentity.gettAmount());
-//				logger.info("Transction Suceccfull and Bank Account Details" + bankDetails);
-//				r.setValue("Transaction Successful");
-//				response3 = new ResponseEntity<>(r,HttpStatus.OK);
-//			}
-//		}
-		return response3;
-	}
-
 	@GetMapping("/getMiniStatement/{id}")
     @Override
     public ResponseEntity<Response> getMiniStatement(@PathVariable Long id) throws FinancialException {
@@ -161,7 +131,7 @@ public class TransactionControllerImpl implements TransactionController {
 				
 				fromAcc.setAccBal(fromAcc.getAccBal() - transactionentity.gettAmount());
 				toAcc.setAccBal(toAcc.getAccBal() + transactionentity.gettAmount());
-				fromAcc.setCibil(fromAcc.getCibil() + 1);
+				fromAcc.setCibil(fromAcc.getCibil() + 20);
 				fromAcc.setAccBal(fromAcc.getAccBal());
 				bankService.addBankAccount(fromAcc);
 				bankService.updateBal(toAcc.getAccBal(), toAcc.getAccNo());

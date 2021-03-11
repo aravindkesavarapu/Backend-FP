@@ -51,16 +51,17 @@ public class BankAccountControllerImpl implements BankAccountController {
 	ResponseEntity<Boolean> response2;
 	ResponseEntity<Response> response3;
 	ResponseEntity<List<BankAccountEntity>> response4;
+	@Autowired
+	private CustomerRepo customerRepo;
 
 	Response r = new Response();
 
-	@Autowired
-	CustomerRepo customerRepo;
 
 	@PostMapping("/addAccount")
 	@Override
 	public ResponseEntity<Response> addBankAccount(@RequestBody BankAccountEntity bankAccountEntity)
 			throws FinancialException {
+		
 		if (bankAccountService.findByAccoutTypeAndCustomerId(bankAccountEntity.getAccountType().toUpperCase(),
 				bankAccountEntity.getCustomerId()) != null) {
 			r.setValue("You already have a " + bankAccountEntity.getAccountType() + " account");
@@ -69,10 +70,10 @@ public class BankAccountControllerImpl implements BankAccountController {
 		} else {
 			bankAccountEntity.setAccNo(bankAccountService.generateAccountNo(bankAccountEntity.getCustomerId()));
 			bankAccountEntity.setAccountType(bankAccountEntity.getAccountType().toUpperCase());
-
-			bankAccountEntity.setCibil(15l);
+			CustomerEntity customerEntity = customerRepo.findByCustomerMobileNo(Long.toString(bankAccountEntity.getCustomerId()));
+			bankAccountEntity.setCustomerName(customerEntity.getCustomerName());
+			bankAccountEntity.setCibil(450.0);
 			BankAccountEntity bankAccountEntity1 = bankAccountService.addBankAccount(bankAccountEntity);
-
 			if (bankAccountEntity1 == null) {
 				logger.error("failed to add bank account");
 				throw new FinancialException("failed to add bank account");
@@ -81,11 +82,9 @@ public class BankAccountControllerImpl implements BankAccountController {
 
 				List<BankAccountEntity> accountEntities = bankAccountService
 						.findByCustomerId(bankAccountEntity.getCustomerId());
-
 				r.setValue("Your " + bankAccountEntity.getAccountType() + " account number is "
 						+ bankAccountEntity1.getAccNo());
 				r.setBankAccount(accountEntities);
-//			r.setValue("Successfully Register");
 				r.setStatus("200");
 				response3 = new ResponseEntity<>(r, HttpStatus.OK);
 			}
@@ -123,6 +122,7 @@ public class BankAccountControllerImpl implements BankAccountController {
 			double accBal = bankAccountEntity.getAccBal() + amount;
 			System.out.println(accBal);
 			bankAccountEntity.setAccBal(accBal);
+			bankAccountEntity.setCibil(bankAccountEntity.getCibil()+10);
 //			bankAccountEntity.
 			bankAccountService.addBankAccount(bankAccountEntity);
 			System.out.println(bankAccountEntity);
