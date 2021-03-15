@@ -49,47 +49,45 @@ public class TransactionControllerImpl implements TransactionController {
 	Response r = new Response();
 
 	@GetMapping("/getMiniStatement/{id}")
-    @Override
-    public ResponseEntity<Response> getMiniStatement(@PathVariable Long id) throws FinancialException {
-        List<TransactionEntity> list3 = service1.getMiniStatement(id);
-        if (list3 == null) {
-            logger.error("No transaction found");
-            r.setStatus("ERROR");
-            r.setTransactionEntities(null);
-            r.setValue("No transaction found");
-            response3 = new ResponseEntity<Response>(r, HttpStatus.NOT_FOUND);
-        } else {
-            r.setTransactionEntities(list3);
-            r.setStatus("SUCESS");
-            r.setValue("transaction found");
-            response3 = new ResponseEntity<>(r, HttpStatus.OK);
-        }
+	@Override
+	public ResponseEntity<Response> getMiniStatement(@PathVariable Long id) throws FinancialException {
+		List<TransactionEntity> list3 = service1.getMiniStatement(id);
+		if (list3 == null) {
+			logger.error("No transaction found");
+			r.setStatus("ERROR");
+			r.setTransactionEntities(null);
+			r.setValue("No transaction found");
+			response3 = new ResponseEntity<Response>(r, HttpStatus.NOT_FOUND);
+		} else {
+			r.setTransactionEntities(list3);
+			r.setStatus("SUCESS");
+			r.setValue("transaction found");
+			response3 = new ResponseEntity<>(r, HttpStatus.OK);
+		}
 
- 
-
-        return response3;
-    } 	
+		return response3;
+	}
 
 	@GetMapping("/getAllTransaction/{id}")
-    @Override
-    public ResponseEntity<Response> getAllTransaction(@PathVariable Long id) throws FinancialException {
-        List<TransactionEntity> list2 = service1.getAllTransaction(id);
-        if (list2 == null) {
-            logger.error("No transaction found");
-            r.setTransactionEntities(null);
-            r.setStatus("ERROR");
-            r.setValue("No transaction found");
-            response3 = new ResponseEntity<>(r, HttpStatus.NOT_FOUND);
-            throw new FinancialException("No transaction found");
-        } else {
-            r.setTransactionEntities(list2);
-            r.setStatus("SUCESS");
-            r.setValue("transaction found");
-            response3 = new ResponseEntity<>(r, HttpStatus.OK);
-        }
-        return response3;
-    }
-	
+	@Override
+	public ResponseEntity<Response> getAllTransaction(@PathVariable Long id) throws FinancialException {
+		List<TransactionEntity> list2 = service1.getAllTransaction(id);
+		if (list2 == null) {
+			logger.error("No transaction found");
+			r.setTransactionEntities(null);
+			r.setStatus("ERROR");
+			r.setValue("No transaction found");
+			response3 = new ResponseEntity<>(r, HttpStatus.NOT_FOUND);
+			throw new FinancialException("No transaction found");
+		} else {
+			r.setTransactionEntities(list2);
+			r.setStatus("SUCESS");
+			r.setValue("transaction found");
+			response3 = new ResponseEntity<>(r, HttpStatus.OK);
+		}
+		return response3;
+	}
+
 	@PostMapping("/transfer")
 	@Override
 	public ResponseEntity<Response> transferBal(@RequestBody TransactionEntity transactionentity)
@@ -99,8 +97,20 @@ public class TransactionControllerImpl implements TransactionController {
 		if (fromAcc != null) {
 			BankAccountEntity toAcc = bankService.findByBankAccount(transactionentity.getToAcc());
 			if (toAcc == null) {
-				r.setStatus("ERROR");
-				r.setValue("Please Check your transfeering Account No: " + transactionentity.getToAcc());
+
+				Long fromAccountCustomerId = fromAcc.getCustomerId();
+				transactionentity.setCustomerId(fromAccountCustomerId);
+				transactionentity.settDate(LocalDate.now());
+				transactionentity.settTime(LocalTime.now());
+				transactionentity.settType("DEBIT");
+
+				TransactionEntity transfer1 = service1.addTransction(transactionentity);
+				fromAcc.setAccBal(fromAcc.getAccBal() - (transactionentity.gettAmount() + 10));
+				fromAcc.setCibil(fromAcc.getCibil() + 30);
+				bankService.addBankAccount(fromAcc);
+
+				r.setStatus("SUCESS");
+				r.setValue("Successfully transferred money to" + transactionentity.getToAcc());
 				response3 = new ResponseEntity<>(r, HttpStatus.OK);
 			} else if (fromAcc.getAccBal() < transactionentity.gettAmount()) {
 				logger.info("Account balance is low");
@@ -115,9 +125,9 @@ public class TransactionControllerImpl implements TransactionController {
 				transactionentity.settDate(LocalDate.now());
 				transactionentity.settTime(LocalTime.now());
 				transactionentity.settType("DEBIT");
-				
+
 				TransactionEntity transfer1 = service1.addTransction(transactionentity);
-					
+
 				TransactionEntity t2 = new TransactionEntity();
 				t2.setCustomerId(toAcc.getCustomerId());
 				t2.settDate(LocalDate.now());
@@ -128,7 +138,7 @@ public class TransactionControllerImpl implements TransactionController {
 				t2.setToAcc(transactionentity.getToAcc());
 				TransactionEntity transfer2 = service1.addTransction(t2);
 				System.err.println(transfer2);
-				
+
 				fromAcc.setAccBal(fromAcc.getAccBal() - transactionentity.gettAmount());
 				toAcc.setAccBal(toAcc.getAccBal() + transactionentity.gettAmount());
 				fromAcc.setCibil(fromAcc.getCibil() + 20);
@@ -146,9 +156,5 @@ public class TransactionControllerImpl implements TransactionController {
 		}
 		return response3;
 	}
-	
-	
-	
-	
 
 }

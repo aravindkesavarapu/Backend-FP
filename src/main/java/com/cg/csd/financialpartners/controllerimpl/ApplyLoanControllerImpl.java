@@ -98,31 +98,35 @@ public class ApplyLoanControllerImpl implements ApplyLoanController {
 		return response3;
 	}
 
-	@GetMapping("/admin/acceptLoan/{loanId}/{status}")
-	public ResponseEntity<Response> updateLoanStatus(@PathVariable long loanId, @PathVariable String status)
+	@PutMapping("/admin/acceptLoan")
+	public ResponseEntity<Response> updateLoanStatus(@RequestBody ApplyLoanEntity entity)
 			throws FinancialException {
+		String status = entity.getStatus();
+		Long loanId = entity.getLoanId();
+		String desc = entity.getPurpose();
 		ApplyLoanEntity loanEntity = loanRepo.findById(loanId).get();
 		if (loanEntity == null) {
-
 			r.setStatus("ERROR");
 			r.setValue("User Not Applied Loan");
 			return new ResponseEntity<>(r, HttpStatus.OK);
 		} else {
-
 			loanEntity.setStatus(status);
-			if (status == "APRROVED") {
+			if (status.equals("APPROVED")) {
 				loanEntity.setStartDate(LocalDate.now());
 				loanEntity.setEndDate(LocalDate.now().plusMonths(Long.parseLong(loanEntity.getDuration())));
+				System.out.println(loanEntity);
+				loanEntity.setDescription(desc);
+
 				ApplyLoanEntity updatedLoan = loanservice.addLoan(loanEntity);
 				r.setStatus("SUCESS");
 				r.setValue("Set Status: " + updatedLoan.getStatus());
 				return new ResponseEntity<Response>(r, HttpStatus.OK);
 			} else {
 				loanEntity.setStatus(status);
+				loanEntity.setDescription(desc);
 				r.setStatus("REJECTED");
 				ApplyLoanEntity updatedLoan = loanservice.addLoan(loanEntity);
 				return new ResponseEntity<Response>(r, HttpStatus.OK);
-
 			}
 		}
 	}
