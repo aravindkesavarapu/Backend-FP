@@ -99,8 +99,21 @@ public class TransactionControllerImpl implements TransactionController {
 		if (fromAcc != null) {
 			BankAccountEntity toAcc = bankService.findByBankAccount(transactionentity.getToAcc());
 			if (toAcc == null) {
-				r.setStatus("ERROR");
-				r.setValue("Please Check your transfeering Account No: " + transactionentity.getToAcc());
+				
+				Long fromAccountCustomerId = fromAcc.getCustomerId();
+				transactionentity.setCustomerId(fromAccountCustomerId);
+				transactionentity.settDate(LocalDate.now());
+				transactionentity.settTime(LocalTime.now());
+				transactionentity.settType("DEBIT");
+				
+				TransactionEntity transfer1 = service1.addTransction(transactionentity);
+				fromAcc.setAccBal(fromAcc.getAccBal() - (transactionentity.gettAmount() + 10));
+				fromAcc.setCibil(fromAcc.getCibil() + 30);
+				bankService.addBankAccount(fromAcc);
+				
+				
+				r.setStatus("SUCESS");
+				r.setValue("Successfully transferred money to" + transactionentity.getToAcc());
 				response3 = new ResponseEntity<>(r, HttpStatus.OK);
 			} else if (fromAcc.getAccBal() < transactionentity.gettAmount()) {
 				logger.info("Account balance is low");

@@ -17,6 +17,7 @@ public class ApplyLoanServiceImpl implements ApplyLoanService {
 
 	@Override
 	public ApplyLoanEntity addLoan(ApplyLoanEntity loanentity) {
+		System.out.println(loanentity);
 		return loanrepo.saveAndFlush(loanentity);
 	}
 

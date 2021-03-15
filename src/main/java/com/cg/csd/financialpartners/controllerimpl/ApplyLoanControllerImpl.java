@@ -109,11 +109,13 @@ public class ApplyLoanControllerImpl implements ApplyLoanController {
 			return new ResponseEntity<>(r, HttpStatus.OK);
 		} else {
 
+			System.out.println(status);
 			loanEntity.setStatus(status);
-			if (status == "APRROVED") {
+			if (status.equals("APPROVED")) {
 				loanEntity.setStartDate(LocalDate.now());
 				loanEntity.setEndDate(LocalDate.now().plusMonths(Long.parseLong(loanEntity.getDuration())));
 				ApplyLoanEntity updatedLoan = loanservice.addLoan(loanEntity);
+				System.out.println(updatedLoan);
 				r.setStatus("SUCESS");
 				r.setValue("Set Status: " + updatedLoan.getStatus());
 				return new ResponseEntity<Response>(r, HttpStatus.OK);
