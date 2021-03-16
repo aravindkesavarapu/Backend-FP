@@ -15,13 +15,11 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public CustomerEntity registration(CustomerEntity customerentity) {
-		// TODO Auto-generated method stub
 		return repo.saveAndFlush(customerentity);
 	}
 
 	@Override
 	public CustomerEntity login(String mobno, String pwd) {
-		// TODO Auto-generated method stub
 		return repo.findByCustomerMobileNoAndPassword(mobno, pwd);
 	}
 
@@ -38,7 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public CustomerEntity updatePwd(String customerMobileNo, String oldPassword, String newPassword) {
 
-		System.out.println("From cusotmer Service" + customerMobileNo);
+		System.out.println("From customer Service" + customerMobileNo);
 		CustomerEntity customerentity1 = repo.findByCustomerMobileNoAndPassword(customerMobileNo, oldPassword);
 		if (customerentity1 != null) {
 
